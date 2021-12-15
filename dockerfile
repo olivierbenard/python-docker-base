@@ -1,15 +1,15 @@
 FROM python:latest
 
-# each run is a distinct process
-RUN python3 -m venv /opt/venv
+ENV VIRTUAL_ENV = /opt/venv
+RUN python3 -m venv $VIRTUAL_ENV
 
-# activate the virtual environment
-# RUN . /opt/venv/bin/activate
+# do what activating venv does ie. set two environment variables ~ /opt/venv/bin/activate
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # install the dependencies at the root folder
 COPY requirements.txt .
-RUN . /opt/venv/bin/activate && pip install -r requirements.txt
+RUN pip install -r requirements.txt
 
 # run the application
 COPY app.py .
-CMD . /opt/venv/bin/activate && exec python app.py
+CMD ["python", "app.py", "-c", "4"]
